@@ -70,9 +70,11 @@
 
 <p>O símbolo ? separa a URL dos parâmetros. Os parâmetros seguem o formato <b>chave=valor</b></p>
 
-<h2>Anatomia de um Controller</h2>
+<h2>Método POST</h2>
+<p>É um dos verbos HTTP e é usado para enviar dados ao servidor para criar um novo recurso. Ao contrário do GET, que busca dados, o POST modifica o estado do servidor ao adicionar novas informações</p>
 
-<p>Imagine que temos tarefas com id 1, 2 e 3 porém ao acessar um id fora deste escopo, o resultado certo deveria retornar um null (ou um 404 not found)</p>
+<h3>Corpo da Requisição (Request Body)</h3>
+<p>É a parte de uma requisição onde os dados do cliente são enviados ao servidor, como por exemplo para enviar os dados de uma nova tarefa em formato JSON, que são lidos pelo @RequestBody</p>
 
 
 <h1>Glossário Spring</h1>
@@ -81,6 +83,9 @@
 <p><b>@RequestMapping</b> usada para mapear requisições HTTP para métodos de manipulador de específicos em uma classe controladore. Define o caminho base (ou recurso) para todos os endpoints dentro da classe.</p>
 <p><b>@GetMapping</b> é anotação especialiazada para mapear requisições HTTP GET. Utilizada para definir endpoints que recuperam dados.</p>
 <p><b>@RequestParam</b> usada para extrair parâmetros de consulta (query parameters) da URL. Esses parâmetros aparecem após o ? na URL. Permite que capture o valor de completed e use no seumétodos. O atributo required = false indica que o parâmetro é opcional</p>
-<p><b>@PathVariable</b> extrai valores de variáveis diretamente do caminho da URL em casos onde há placeholders por exemplo, {id} e o passa como argumento para o método.</p> 
-
+<p><b>@PathVariable</b> extrai valores de variáveis diretamente do caminho da URL em casos onde há placeholders por exemplo, {id} e o passa como argumento para o método.</p>
 <p><b>Classe ResponseEntity</b> responsável por representar toda a resposta HTTP, incluindo status code, os cabeçalhos e o corpo da resposta que a API envia e volta ao cliente </p>
+<p><b>@PostMapping</b> é usada para mapear requisições HTTP do tipo POST para um método específico em um controller. Indica ao Spring que o método anotado deve ser executado quando uma requisição POST for feita para o endpoint especificado.</p>
+<p><b>@RequestBody</b> utilizada para indicar que um parâmetro de método deve ser preenchido com o corpo da requisição HTTP. No contexto de uma API REST, significa que o Spring converterá o JSON enviado no corpo da requisição para um objeto Java.</p>
+<p><b></b></p>
+<p><b></b></p>
