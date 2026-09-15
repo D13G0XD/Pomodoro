@@ -87,5 +87,5 @@
 <p><b>Classe ResponseEntity</b> responsável por representar toda a resposta HTTP, incluindo status code, os cabeçalhos e o corpo da resposta que a API envia e volta ao cliente </p>
 <p><b>@PostMapping</b> é usada para mapear requisições HTTP do tipo POST para um método específico em um controller. Indica ao Spring que o método anotado deve ser executado quando uma requisição POST for feita para o endpoint especificado.</p>
 <p><b>@RequestBody</b> utilizada para indicar que um parâmetro de método deve ser preenchido com o corpo da requisição HTTP. No contexto de uma API REST, significa que o Spring converterá o JSON enviado no corpo da requisição para um objeto Java.</p>
-<p><b></b></p>
+<p><b>@PutMapping</b> utilizada para mapear requisições HTTP do tipo PUT para um método específico em nosso controller.</p>
 <p><b></b></p>

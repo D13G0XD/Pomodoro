@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,6 +55,21 @@ public class TaskController {
         task.setId(nextId.getAndIncrement()); // cria uma task com id dinâmico
         tasks.add(task);
         return ResponseEntity.status(HttpStatus.CREATED).body(task); // Retorna um 201 (criação de um objeto)
+
+    }
+
+    @PutMapping("/{id}") // Indica a criação de um enpoint put
+    public ResponseEntity<Task> updateTask (@PathVariable Long id, @RequestBody Task task) {
+        return tasks.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .map(existing -> {
+                    existing.setTitle(task.getTitle());
+                    existing.setId(task.getId());
+                    existing.setCompleted(task.getCompleted());
+                    return ResponseEntity.ok(existing);
+                })
+                .orElse(ResponseEntity.notFound().build());
 
     }
 
