@@ -70,10 +70,17 @@
 
 <p>O símbolo ? separa a URL dos parâmetros. Os parâmetros seguem o formato <b>chave=valor</b></p>
 
-<h1>Glossário de Anotações</h1>
+<h2>Anatomia de um Controller</h2>
+
+<p>Imagine que temos tarefas com id 1, 2 e 3 porém ao acessar um id fora deste escopo, o resultado certo deveria retornar um null (ou um 404 not found)</p>
+
+
+<h1>Glossário Spring</h1>
 
 <p><b>@RestController</b> ela informa ao Spring que a classe é um controlador e que os métpdps dentro ela devem retornar dados diretamente (JSON ou XML) em vez de nomes de views. Crucial para construir APIs RESTful</p>
 <p><b>@RequestMapping</b> usada para mapear requisições HTTP para métodos de manipulador de específicos em uma classe controladore. Define o caminho base (ou recurso) para todos os endpoints dentro da classe.</p>
 <p><b>@GetMapping</b> é anotação especialiazada para mapear requisições HTTP GET. Utilizada para definir endpoints que recuperam dados.</p>
 <p><b>@RequestParam</b> usada para extrair parâmetros de consulta (query parameters) da URL. Esses parâmetros aparecem após o ? na URL. Permite que capture o valor de completed e use no seumétodos. O atributo required = false indica que o parâmetro é opcional</p>
 <p><b>@PathVariable</b> extrai valores de variáveis diretamente do caminho da URL em casos onde há placeholders por exemplo, {id} e o passa como argumento para o método.</p> 
+
+<p><b>Classe ResponseEntity</b> responsável por representar toda a resposta HTTP, incluindo status code, os cabeçalhos e o corpo da resposta que a API envia e volta ao cliente </p>
