@@ -76,6 +76,21 @@
 <h3>Corpo da Requisição (Request Body)</h3>
 <p>É a parte de uma requisição onde os dados do cliente são enviados ao servidor, como por exemplo para enviar os dados de uma nova tarefa em formato JSON, que são lidos pelo @RequestBody</p>
 
+<h1>Spring Data JPA</h1>
+
+É um framework responsável por simplificar a iteração com bancos de dados erlacionais no contexto do Spring Boot, atuando como uma camada de abstração sobre o JPA (Java Persistence API), que é uma especificação de mapeamento objeto-relacional.
+
+<p>A ideia central é facilitar a implementação de operações CRUD (Criar, Ler, Atualizar e Excluir) </p>
+
+<h2>Mapeamento Simplificado</h2>
+
+<p>A tradução direta do modelo orientada a objetos para o banco de dados</p>
+
+Task (Objeto Java) => JPA => tasks (tabela relacional)
+
+<h2>Evolução do Mapeamento</h2>
+
+JPA especificação que permite mapear objetos Java para tabela de banco de dados => Spring Data JPA abstração que facilita e simplifica o uso prático dessa especificação no dia a dia.
 
 <h1>Glossário Spring</h1>
 
@@ -88,4 +103,8 @@
 <p><b>@PostMapping</b> é usada para mapear requisições HTTP do tipo POST para um método específico em um controller. Indica ao Spring que o método anotado deve ser executado quando uma requisição POST for feita para o endpoint especificado.</p>
 <p><b>@RequestBody</b> utilizada para indicar que um parâmetro de método deve ser preenchido com o corpo da requisição HTTP. No contexto de uma API REST, significa que o Spring converterá o JSON enviado no corpo da requisição para um objeto Java.</p>
 <p><b>@PutMapping</b> utilizada para mapear requisições HTTP do tipo PUT para um método específico em nosso controller.</p>
+<p><b>@Entity</b> usada para maracar uma classe como entidade JPA. Isso significa que o Spring e o Hibernate (implementação do JPA) vão entender que essa classe corresponde a uma tabela no banco de dados. Cada instância será uma linha na tabela.</p>
+<p><b>@Id</b> é aplicada em um campo dentro da classe Task para indicar que ele é a chave primária da entidade. A chave primária é um identificador único para cada registro na tabela do banco de dados.</p>
+<p><b>@GeneratedValue(GenerationType.IDENTITY)</b> é utilizada em conjunto com @Id para especificar como o valor da chave primária será gerado. No caso de GenerationType.IDENTITY, o banco de dados será responsável pro gerar automaticamente um valor único para cada ID, geralmente de forma incremental, a cada novo registro</p>
+<p><b></b></p>
 <p><b></b></p>
