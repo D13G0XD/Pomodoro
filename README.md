@@ -92,6 +92,18 @@ Task (Objeto Java) => JPA => tasks (tabela relacional)
 
 JPA especificação que permite mapear objetos Java para tabela de banco de dados => Spring Data JPA abstração que facilita e simplifica o uso prático dessa especificação no dia a dia.
 
+<h2>Repository</h2>
+
+É uma <b>interface</b> que permite interagir com o banco de dados herdando métodos de uma outra interface da JpaRepository vindo com o seguintes métodos:
+
+| Métodos        |                     Função                     | 
+|:---------------|:----------------------------------------------:| 
+| findAll()      |            busca todos os registros            | 
+| findById(id)   | para buscar um registro pelo seu identificador | 
+| save(entity)   |       para criar ou atualizar registros        | 
+| deleteById(id) |   exclui um registro pelo seu identificador    | 
+| existsById(id) |      para verificar se um registro existe      | 
+
 <h1>Glossário Spring</h1>
 
 <p><b>@RestController</b> ela informa ao Spring que a classe é um controlador e que os métpdps dentro ela devem retornar dados diretamente (JSON ou XML) em vez de nomes de views. Crucial para construir APIs RESTful</p>

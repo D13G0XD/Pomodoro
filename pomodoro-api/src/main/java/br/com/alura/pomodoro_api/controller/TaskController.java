@@ -1,6 +1,7 @@
 package br.com.alura.pomodoro_api.controller;
 
 import br.com.alura.pomodoro_api.model.Task;
+import br.com.alura.pomodoro_api.repository.TaskRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,82 +14,67 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks") // Define que qualquer endpoint criado começará com o path informado
 public class TaskController {
 
-    private List<Task> tasks = new ArrayList<>();
-    private AtomicLong nextId = new AtomicLong(1); // permite realizar operações thread-safe
+    private final TaskRepository taskRepository;
 
 
-    public TaskController() {
+    public TaskController(TaskRepository taskRepository) {
 
-        tasks.add(new Task(nextId.getAndIncrement(), "Estudar Spring Boot", false));
-        tasks.add(new Task(nextId.getAndIncrement(), "Fazer exercícios de revisão", false));
-        tasks.add(new Task(nextId.getAndIncrement(), "Assistir aula de testes", true));
-        // funciona como uma forma dinâmica para criar valores para um id, por exemplo
+        this.taskRepository = taskRepository;
     }
 
 
     @GetMapping // Irá mapear os endpoints conforme a condição passada
-    public ResponseEntity<List<Task>> findAll(@RequestParam(required = false) Boolean completed){
+    public ResponseEntity<List<Task>> getTasks(@RequestParam(required = false) Boolean completed){
         // RequestParam aceita valores booleanos
 
         if (completed != null) {
 
-            return ResponseEntity.ok(tasks);
+            return ResponseEntity.ok(taskRepository.findAll());
 
         }
-        return ResponseEntity.ok(tasks.stream()
-                .filter(task -> task.getCompleted().equals(completed))
-                .collect(Collectors.toList())
+        return ResponseEntity.ok(taskRepository.findByCompleted(completed));
 
-        );
     }
 
     @PostMapping // Indica a criação de um endpoint post
     public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        task.setId(nextId.getAndIncrement()); // cria uma task com id dinâmico
-        tasks.add(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body(task); // Retorna um 201 (criação de um objeto)
+        Task saved = taskRepository.save(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 
     }
 
     @PutMapping("/{id}") // Indica a criação de um enpoint put
     public ResponseEntity<Task> updateTask (@PathVariable Long id, @RequestBody Task task) {
-        return tasks.stream()
-                .filter(t -> t.getId().equals(id))
-                .findFirst()
-                .map(existing -> {
-                    existing.setTitle(task.getTitle());
-                    existing.setId(task.getId());
-                    existing.setCompleted(task.getCompleted());
-                    return ResponseEntity.ok(existing);
-                })
-                .orElse(ResponseEntity.notFound().build());
+        return taskRepository.findById(id).map(existing ->{
+            existing.setTitle(task.getTitle());
+            existing.setCompleted(task.getCompleted());
+            return ResponseEntity.ok(taskRepository.save(existing));
+        }).orElse(ResponseEntity.notFound().build());
 
     }
 
     @DeleteMapping("/{id}")
     public  ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        boolean removed = tasks.removeIf(task -> task.getId().equals(id));
-        return removed
-                ? ResponseEntity.noContent().build() // Se possuir id remove retornando um 204 (no content)
-                : ResponseEntity.notFound().build(); // Caso contrário retorna um 404
+        if (taskRepository.existsById(id)) {
+            taskRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+
+        }
+        return ResponseEntity.notFound().build();
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id)  { // @PathVariable lê o valor que passa no placeholder como parâmetro
-        return tasks.stream()
-                .filter(task -> task.getId().equals(id))
-                .findFirst()
-                .map(ResponseEntity::ok)// percorre pela classe procurando um status ok caso contrário
-                .orElse(ResponseEntity.notFound().build()); // Os métodos passados com a classe retornam o 404
+        return taskRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 
