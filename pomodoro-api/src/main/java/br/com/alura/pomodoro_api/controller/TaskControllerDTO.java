@@ -1,7 +1,10 @@
 package br.com.alura.pomodoro_api.controller;
 
+import br.com.alura.pomodoro_api.dto.TaskRequestDTO;
+import br.com.alura.pomodoro_api.dto.TaskResponseDTO;
 import br.com.alura.pomodoro_api.model.Task;
 import br.com.alura.pomodoro_api.repository.TaskRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,12 +21,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tasks") // Define que qualquer endpoint criado começará com o path informado
-public class TaskController {
+public class TaskControllerDTO {
 
     private final TaskRepository taskRepository;
 
 
-    public TaskController(TaskRepository taskRepository) {
+    public TaskControllerDTO(TaskRepository taskRepository) {
 
         this.taskRepository = taskRepository;
     }
@@ -42,21 +45,30 @@ public class TaskController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Task> getTaskById(@PathVariable Long id)  { // @PathVariable lê o valor que passa no placeholder como parâmetro
+        return taskRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping // Indica a criação de um endpoint post
-    public ResponseEntity<Task> createTask(@RequestBody Task task) {
-        Task saved = taskRepository.save(task);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO dto) {
+        Task saved = taskRepository.save(toEntity(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(saved));
 
     }
 
     @PutMapping("/{id}") // Indica a criação de um enpoint put
-    public ResponseEntity<Task> updateTask (@PathVariable Long id, @RequestBody Task task) {
-        return taskRepository.findById(id).map(existing ->{
-            existing.setTitle(task.getTitle());
-            existing.setCompleted(task.getCompleted());
-            return ResponseEntity.ok(taskRepository.save(existing));
-        }).orElse(ResponseEntity.notFound().build());
-
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @Valid @ RequestBody TaskRequestDTO dto) {
+        return taskRepository.findById(id)
+                .map(existing -> {
+                    Task updated = toEntity(dto);
+                    existing.setTitle(updated.getTitle());
+                    existing.setCompleted(updated.getCompleted());
+                    return ResponseEntity.ok(toDTO(taskRepository.save(existing)));
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -70,11 +82,23 @@ public class TaskController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id)  { // @PathVariable lê o valor que passa no placeholder como parâmetro
-        return taskRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    private TaskResponseDTO toDTO(Task task) {
+
+        return new TaskResponseDTO(task.getId(), task.getTitle(), task.getCompleted());
+
+    }
+
+    public void Task() {
+
+    }
+
+    private Task toEntity(TaskRequestDTO dto) {
+
+        Task task = new Task();
+        task.setTitle(dto.title());
+        task.setCompleted(dto.completed() != null ? dto.completed() : false);
+        return task;
+
     }
 
 

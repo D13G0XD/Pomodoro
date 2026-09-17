@@ -92,6 +92,18 @@ Task (Objeto Java) => JPA => tasks (tabela relacional)
 
 JPA especificação que permite mapear objetos Java para tabela de banco de dados => Spring Data JPA abstração que facilita e simplifica o uso prático dessa especificação no dia a dia.
 
+<h2>Hibernate Dialect</h2>
+
+No contexto do JPA e do Hibernate, o Dialect é uma configuração que instrui o Hibernate sobre as particularidades da linguagem SQL de cada SGBD. É essencial para que o framework gere os comando SQL compatíveis com o banco de dados utilizado, como PostgreSQL, MySQL, Oracle e etc. Cada Dialect adapta as queries automaticamente como funções, palavras reservadas e a sintaxe específica de cada sistema.
+
+<h3>Funcionamento e importância</h3>
+
+Ao configurar o Hibernate, a indicação do Dialect apropriado permite que a aplicação traduza as operações realizadas sobre as entidades Java em comnados SQL corretamente ormatados. Por exemplo com o Postgres Dialect, consulta e atualizações se adaptam às características do PostgreSQL.
+
+<p>Utilizar o Dialect adequado facilita a manutenção e protabilidade da aplicação, como em casos de denecessidade de migração para outro banco de dados, atualziar a configuração pode ser o primeiro passo para o ajuste, mantendo as consistência.</p>
+
+No application.properties, inserimos (no contexto PosgreSQL): spring.jpa.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialeact
+
 <h2>Repository</h2>
 
 É uma <b>interface</b> que permite interagir com o banco de dados herdando métodos de uma outra interface da JpaRepository vindo com o seguintes métodos:
@@ -103,6 +115,31 @@ JPA especificação que permite mapear objetos Java para tabela de banco de dado
 | save(entity)   |       para criar ou atualizar registros        | 
 | deleteById(id) |   exclui um registro pelo seu identificador    | 
 | existsById(id) |      para verificar se um registro existe      | 
+
+<h1>Fluxo da requisição HTTP</h1>
+
+<ol>
+    <li>Postman => Envia a requisição HTTP</li>
+    <li>Controller => Recebe e valida a entrada </li>
+    <li>Repository => Abstrai operações de dados (Salvar, buscar, atualiza ou excluir) </li>
+    <li>JPA => Mapeia entidades e queries</li>
+    <li>PostgreSQL => Persistência de dados</li>
+</ol>
+
+<h1>DTO (Data Transfer Object)</h1>
+
+É um padrão de projeto usado para controlar qual informação enviamos para a pessoa usuário e qual recebemos dela. A ideia principal é evitar expor campos internos da Entity (como createdAt ou internalCode) que não são relevantes para o frontend, garantindo segurança e retorno de dados mais limpo.
+
+
+| DTO (O que o cliente vê) | Entity(O que existe no banco) | 
+|:-------------------------|:-----------------------------:| 
+| Long id                  |            Long id            | 
+| String title             |         String title          | 
+| Boolean completed        |       Boolean completed       | 
+| -                        |       Integer internId        | 
+| -                        |   LocalDateTime createdDate   | 
+
+
 
 <h1>Glossário Spring</h1>
 
@@ -118,5 +155,7 @@ JPA especificação que permite mapear objetos Java para tabela de banco de dado
 <p><b>@Entity</b> usada para maracar uma classe como entidade JPA. Isso significa que o Spring e o Hibernate (implementação do JPA) vão entender que essa classe corresponde a uma tabela no banco de dados. Cada instância será uma linha na tabela.</p>
 <p><b>@Id</b> é aplicada em um campo dentro da classe Task para indicar que ele é a chave primária da entidade. A chave primária é um identificador único para cada registro na tabela do banco de dados.</p>
 <p><b>@GeneratedValue(GenerationType.IDENTITY)</b> é utilizada em conjunto com @Id para especificar como o valor da chave primária será gerado. No caso de GenerationType.IDENTITY, o banco de dados será responsável pro gerar automaticamente um valor único para cada ID, geralmente de forma incremental, a cada novo registro</p>
+<p><b>@NotBlank</b> utilizado para determinar que uma string em Java não seja nula, não esteja vazia e contenha pelo menos um caractere que não seja espaço em branco. Pode receber uma variável message que exibe caso a variável esteja em branco. </p>
+<p><b>@Size</b> utilizado para determinar um tamanho mínimo e/ou máximo</p>
 <p><b></b></p>
 <p><b></b></p>
